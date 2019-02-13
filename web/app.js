@@ -1,9 +1,11 @@
+import DrawRectangle from './rtcontrol';
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2VlbnllYSIsImEiOiJjanJ6eTlvamsxZHVkNDlsdm40MnVoejc4In0.AzM2YIBfmI47aJQLfoO8zg';
 
 var map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/streets-v9',
-  center:[120.63, 31.16],
+  center: [120.63, 31.16],
   zoom: 15
 });
 
@@ -13,17 +15,17 @@ const randomNumber = (start = 120.63, end = 31.16) => {
 }
 
 const genFeature = (N = 30) => {
-    let arrs = [];
-    for(let i = 0;i < N;i++){
-      arrs.push({
-        "type": "Feature",
-        "geometry": {
-          "type": "Point",
-          "coordinates": [randomNumber(120.615, 120.645), randomNumber(31.156,  31.172)]
-        }
-      });
-    }
-    return arrs;
+  let arrs = [];
+  for (let i = 0; i < N; i++) {
+    arrs.push({
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [randomNumber(120.615, 120.645), randomNumber(31.156, 31.172)]
+      }
+    });
+  }
+  return arrs;
 };
 
 const features = genFeature();
@@ -32,7 +34,7 @@ map.on('load', function () {
   map.loadImage('https://i.imgur.com/MK4NUzI.png', function (error, image) {
     if (error) throw error;
     map.addImage('cat', image);
-    map.addLayer({
+    var layerId = map.addLayer({
       "id": "points",
       "type": "symbol",
       "source": {
@@ -46,9 +48,25 @@ map.on('load', function () {
         "icon-image": "cat"
       }
     });
+    console.log('layerId =>', layerId);
   });
 });
 
+var modes = MapboxDraw.modes;
+
+modes.draw_rectangle = DrawRectangle.default;
+
+var draw = new MapboxDraw({
+    modes: modes
+});
+map.addControl(draw);
+
+draw.changeMode('draw_rectangle');
+
+map.on('draw.create', function (feature) {
+    console.log(feature);
+});
+
 map.on('click', (a) => {
-  console.log(map, a)
+  console.log(draw);
 });

@@ -20,3 +20,4 @@ package-lock.json
 /index.html
 
 npm-debug.log
+yarn.lock

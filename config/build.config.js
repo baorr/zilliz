@@ -5,7 +5,7 @@ const htmlTemplate = path.resolve(__dirname, '../web/index.html');
 const outputPath = path.resolve(__dirname, '../web/dist');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');    //a plugins for html 
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+//const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 const config = {
     entry: entry,
@@ -18,29 +18,22 @@ const config = {
         template: htmlTemplate,
         hash: true 
       }),
-      new VueLoaderPlugin()
+      //new VueLoaderPlugin()
     ],
     module: {
       rules: [
-        {
-          test: /\.vue$/,
-          loader: 'vue-loader'
-        },
         {
           test: /\.js$/,
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['env']
+              presets: ['es2015', 'env']
             }
           }
         }
       ]
     },
     resolve: {
-      alias: {
-        'vue': 'vue/dist/vue.js'
-      }
     }  
   };
 
